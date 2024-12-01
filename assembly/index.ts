@@ -74,11 +74,18 @@ Only respond with valid JSON object containing a valid JSON array named 'list', 
   return results.get("list");
 }
 
-export function generateInfographic(title: string, steps: i32): Infographic {
-  const instruction = `Generate an infographic with ${steps} steps for the title provided.
-Only respond with valid JSON object containing a valid JSON array named 'list', in this format:
-{"list":[${sampleInfographicJson}]}`;
-  const prompt = `The title is "${title}".`;
+export function generateInfographic(title: string, steps: i32, inputType: string): Infographic {
+  let instruction = `Generate an infographic with ${steps} steps for the title provided.
+  Only respond with valid JSON object containing a valid JSON array named 'list', in this format:
+  {"list":[${sampleInfographicJson}]}`;
+  let prompt = `The title is "${title}".`;
+
+ if(inputType == 'para') {
+    instruction = `Based on the paragraph provided generate infographic with ${steps}.
+    Only respond with valid JSON object containing a valid JSON array named 'list', in this format:
+    {"list":[${sampleInfographicJson}]} `;
+    prompt = `The paragraph is "${title}".`;
+  }
 
   const model = models.getModel<OpenAIChatModel>(modelName);
   const input = model.createInput([
